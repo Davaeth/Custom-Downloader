@@ -70,6 +70,8 @@ class MainActivity : AppCompatActivity() {
             if (tryToDownload()) {
                 fileDownloaderTask.execute(URL(text_siteAddress.text.toString()))
                 wasDownloadExecuted = true
+
+                button_cancelDownloading.visibility = View.VISIBLE
             }
         }
     }
