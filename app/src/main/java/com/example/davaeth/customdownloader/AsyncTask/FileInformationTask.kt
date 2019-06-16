@@ -1,8 +1,9 @@
-package com.example.davaeth.customdownloader
+package com.example.davaeth.customdownloader.AsyncTask
 
 import android.os.AsyncTask
 import android.os.Build
 import android.support.annotation.RequiresApi
+import com.example.davaeth.customdownloader.GlobalVariables
 import java.lang.Exception
 import java.net.URL
 import java.net.URLConnection

@@ -1,15 +1,11 @@
-package com.example.davaeth.customdownloader
+package com.example.davaeth.customdownloader.AsyncTask
 
-import android.annotation.SuppressLint
-import android.app.usage.ExternalStorageStats
-import android.content.Context
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Environment
-import android.os.storage.StorageManager
-import android.provider.ContactsContract
 import android.support.annotation.RequiresApi
 import android.widget.Toast
+import com.example.davaeth.customdownloader.GlobalVariables
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream

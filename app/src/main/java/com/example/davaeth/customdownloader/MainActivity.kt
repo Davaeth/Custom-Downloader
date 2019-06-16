@@ -1,11 +1,6 @@
 package com.example.davaeth.customdownloader
 
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
@@ -13,14 +8,14 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.support.annotation.RequiresApi
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import java.net.URL
 import android.os.StatFs
 import android.util.Log
+import com.example.davaeth.customdownloader.AsyncTask.FileDownloaderTask
+import com.example.davaeth.customdownloader.AsyncTask.FileInformationTask
 
 
 class MainActivity : AppCompatActivity() {
