@@ -81,6 +81,9 @@ class MainActivity : AppCompatActivity() {
     }
     //endregion
 
+    /**
+     * Checking if address TextView is valid.
+     */
     private fun tryToDownload(): Boolean {
         return if (text_siteAddress.text.isNotBlank() && isAbleToDownload) {
             if (text_siteAddress.text.startsWith("http://") || text_siteAddress.text.startsWith("https://")) {

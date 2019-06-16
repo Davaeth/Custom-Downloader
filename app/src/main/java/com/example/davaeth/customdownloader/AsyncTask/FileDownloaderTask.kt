@@ -120,8 +120,4 @@ class FileDownloaderTask : AsyncTask<URL, Int, Long>() {
         GlobalVariables.progressBar.progress = 0
         GlobalVariables.downloadedBytes.text = ""
     }
-
-    private fun notifyUser(function: () -> (Unit)) {
-
-    }
 }
