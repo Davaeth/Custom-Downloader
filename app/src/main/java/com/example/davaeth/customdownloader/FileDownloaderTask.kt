@@ -25,22 +25,8 @@ class FileDownloaderTask : AsyncTask<URL, Int, Long>() {
     private var fileLength: Long = 0;
     private lateinit var connection: URLConnection
     private lateinit var url: URL
-
-    //region Properties
-
-    var Count: Int
-        get() = this.totalSize
-        set(value) {
-            this.totalSize = value
-        }
-
-    var TotalSize: Long
-        get() = this.fileLength
-        set(value) {
-            this.fileLength = value
-        }
-
-    //endregion
+    private lateinit var fileName: String
+    private lateinit var folder: String
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun doInBackground(vararg params: URL?): Long {
@@ -57,14 +43,12 @@ class FileDownloaderTask : AsyncTask<URL, Int, Long>() {
 
                 val iStream = BufferedInputStream(url.openStream(), 8192)
 
-                println("ULR :: $params[0]")
-
-                val folder: String =
+                folder =
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + "androiddeft/"
 
                 val timestamp: String = SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(Date())
 
-                val fileName: String = timestamp + "_" + params[0].toString().substring(
+                fileName = timestamp + "_" + params[0].toString().substring(
                     params[0].toString().lastIndexOf('/') + 1,
                     params[0].toString().length
                 )
@@ -78,30 +62,31 @@ class FileDownloaderTask : AsyncTask<URL, Int, Long>() {
                 // Output stream to write file.
                 val oStream: OutputStream = FileOutputStream(folder + fileName)
 
-                val data = ByteArray(fileLength.toInt())
+                val data = ByteArray(2048)
 
-                while (iStream.read(data) != -1) {
-                    totalSize += iStream.read(data)
-                    publishProgress(((totalSize * 100) / fileLength).toInt())
+                // While loop that checks if there still is any bytes to write.
+                do {
+                    // Getting actual bytes to save.
+                    val bytes = iStream.read(data)
 
-                    println((totalSize * 100) / fileLength)
+                    // Sending downloaded bytes to the progress bar.
+                    totalSize += bytes
+                    publishProgress(((totalSize * 100) / fileLength.toInt()))
 
                     // Actually saving the file.
-                    oStream.write(iStream.read(data))
+                    oStream.write(data, 0, bytes)
 
                     // Checking if downloading was cancelled.
                     if (isCancelled) {
                         break
                     }
-                }
+                } while (bytes != -1)
 
                 oStream.flush()
 
                 // Closing file streams.
                 oStream.close()
                 iStream.close()
-
-                GlobalVariables.notifyUser
 
                 return fileLength
 
@@ -117,6 +102,7 @@ class FileDownloaderTask : AsyncTask<URL, Int, Long>() {
         super.onProgressUpdate(*values)
 
         if (values.isNotEmpty()) {
+            // Managing displayed values.
             GlobalVariables.downloadedBytes.text = ((totalSize * 100) / fileLength).toString()
             GlobalVariables.progressBar.progress = values[0]!!
         }
@@ -124,10 +110,16 @@ class FileDownloaderTask : AsyncTask<URL, Int, Long>() {
 
     override fun onPostExecute(result: Long?) {
         super.onPostExecute(result)
+
+        Toast.makeText(GlobalVariables.context, "Downloaded successfully!", Toast.LENGTH_LONG).show()
     }
 
     override fun onCancelled() {
         super.onCancelled()
+
+        // Deleting file when downloading is cancelled.
+        val fileToDelete = File(folder, fileName)
+        fileToDelete.delete()
 
         GlobalVariables.progressBar.progress = 0
         GlobalVariables.downloadedBytes.text = ""

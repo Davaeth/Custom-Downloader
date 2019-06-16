@@ -38,11 +38,6 @@ class GlobalVariables : Application() {
         @SuppressLint("StaticFieldLeak")
         lateinit var context: Context
 
-        lateinit var notifyUser: Unit
-
-
-//        private var requestCodes: MutableMap<String, Int> = mutableMapOf()
-
         //region Properties
         var NotificationID: Int
             get() = this.notificationID

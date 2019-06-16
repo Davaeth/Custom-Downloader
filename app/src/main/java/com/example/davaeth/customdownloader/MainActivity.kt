@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity() {
         GlobalVariables.fileType = text_fileTypeText
         GlobalVariables.downloadedBytes = text_bytesDownloadedCount
         GlobalVariables.context = this
-        GlobalVariables.notifyUser = notifyUser("Downloaded successfully!")
 
         val stat = StatFs(Environment.getExternalStorageDirectory().absolutePath)
         val bytesAvailable = stat.blockSizeLong * stat.blockCountLong
@@ -84,46 +83,6 @@ class MainActivity : AppCompatActivity() {
         fileDownloaderTask.cancel(true)
     }
     //endregion
-
-    fun notifyUser(content: String) {
-        GlobalVariables.NotificationID += 1
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Your download result!"
-            val descriptionText = "Result information of your recently downloaded file"
-
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-
-            val channel = NotificationChannel("Download result", name, importance).apply {
-                description = descriptionText
-            }
-
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
-
-        val builder = NotificationCompat.Builder(this, "Download result")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Your result!")
-            .setContentText(content)
-            .setStyle(
-                NotificationCompat.BigTextStyle()
-                    .bigText(content)
-            )
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
-
-        with(NotificationManagerCompat.from(this)) {
-            notify(GlobalVariables.NotificationID, builder.build())
-        }
-    }
 
     private fun tryToDownload(): Boolean {
         return if (text_siteAddress.text.isNotBlank() && isAbleToDownload) {
